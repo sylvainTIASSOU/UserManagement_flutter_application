@@ -34,6 +34,7 @@ dependencies:
   path:
   flutter_riverpod: ^2.3.6
   fluttertoast: any
+  http:
 
 
 
@@ -44,6 +45,7 @@ dependencies:
   logger: any
   chopper: ^6.1.4
   dio:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +68,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -88,11 +92,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+     - family: JetBrainsMono
+       fonts:
+         - asset: fonts/JetBrainsMono-Regular.ttf
+     - family: MyFlutterApp
+       fonts:
+         - asset: fonts/MyFlutterApp.ttf
+         #- asset: fonts/Schyler-Italic.ttf
+         # weight: 700
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

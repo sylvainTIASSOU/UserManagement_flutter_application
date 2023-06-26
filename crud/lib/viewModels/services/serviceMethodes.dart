@@ -1,9 +1,27 @@
 import 'package:crud/models/Users.dart';
+import 'package:crud/models/notification.dart';
 import 'package:crud/viewModels/services/services.dart';
 import 'package:dio/dio.dart';
+
+import 'notificationService.dart';
 class ServiceMethodes
 {
- static final  dio = Dio();
+ static final  dio = Dio(BaseOptions(contentType: 'application/json'));
+
+ //methode to get all notification
+ //methode to gett all data
+ static Future<List<Notifications>> getNotifications() async
+ {
+   final notificationApiService = NotificationApiService(dio);
+   try
+   {
+     return await notificationApiService.getAll();
+   }
+   catch(e)
+   {
+     return [];//'votre erreur est la suivante:  $e';
+   }
+ }
 
   //methode de create
   static create(UsersModel model) async
@@ -17,8 +35,22 @@ class ServiceMethodes
     }
   }
 
+  //function to get user Id
+ static Future<Object> getId(String firstName) async
+ {
+   final apiService = ApiService(dio);
+   try
+   {
+     return await apiService.getId(firstName);
+   }
+   catch(e)
+   {
+     return [];//'votre erreur est la suivante:  $e';
+   }
+ }
+
   //methode to gett all data
- static gettAll() async
+ static Future<List<UsersModel>> getAll() async
   {
     final apiService = ApiService(dio);
     try
@@ -27,12 +59,12 @@ class ServiceMethodes
     }
     catch(e)
     {
-      return print(e);
+      return [];//'votre erreur est la suivante:  $e';
     }
   }
 
   //methode to update
- static update(String id, UsersModel usersModel) async
+ static update(int id, UsersModel usersModel) async
   {
     final apiService = ApiService(dio);
     try

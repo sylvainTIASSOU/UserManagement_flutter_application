@@ -1,15 +1,12 @@
 import 'package:crud/models/notification.dart';
-import 'package:crud/viewModels/databaseManager/noficationDatabase.dart';
 import 'package:crud/viewModels/editUserViewModel.dart';
 import 'package:crud/viewModels/providers/providers.dart';
+import 'package:crud/viewModels/services/serviceMethodes.dart';
 import 'package:crud/views/widgets/Widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
-
 import '../../models/Users.dart';
 import '../../viewModels/databaseManager/databaseManager.dart';
-import '../pages/Page.dart';
 
 class UpdateUserWidget extends ConsumerStatefulWidget
 {
@@ -23,9 +20,6 @@ class _UpdateUserState extends ConsumerState
 {
 
   RegExp regex = RegExp(r'^[0-9]+$');
-  // String fname = "";
-  // String lname = "";
-  // String age = "";
   late TextEditingController fNameControler;
   late TextEditingController lNameControler;
   late TextEditingController ageControler;
@@ -59,15 +53,9 @@ class _UpdateUserState extends ConsumerState
         children: [
           const SizedBox(height: 20.0,),
           //container of use profile
-          Container(
-            height: 150.0,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color.fromARGB(200, 200, 200, 200),
-            ),
-          ),
+          Widgets.circleProfil(),
 
-          SizedBox(height: 10,),
+          SizedBox(height: 73,),
           //formulaire d' ajout
           Form(
               key: _formKey,
@@ -76,10 +64,15 @@ class _UpdateUserState extends ConsumerState
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(left: 20.0),
-                    child: Text('First name',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
-                      ),),
+                    child: Row(
+                      children: [
+                        Text('First name',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 15,),
+                        Icon(Icons.circle_rounded, color: Colors.red, size: 5,)
+                      ],
+                    )
                   ),
                   //Widgets.formFieldEdit( '${data?['firstName']}'),
                   Padding(
@@ -93,21 +86,22 @@ class _UpdateUserState extends ConsumerState
                         //fname  = val;
                       },
 
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                      decoration: Widgets.formFieldDecorator('Prénom'),
                     ),
                   ),
 
-                  SizedBox(height: 10,),
+                  SizedBox(height: 38,),
                   const Padding(
                     padding: EdgeInsets.only(left: 20.0),
-                    child: Text('Last name',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
-                      ),),
+                    child: Row(
+                      children: [
+                        Text('Last name',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 15,),
+                        Icon(Icons.circle_rounded, color: Colors.red, size: 5,)
+                      ],
+                    )
                   ),
                   //Widgets.formFieldEdit('${data?['lastName']}'),
                   Padding(
@@ -120,16 +114,11 @@ class _UpdateUserState extends ConsumerState
                       {
                         //lname  = val;
                       },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                      decoration: Widgets.formFieldDecorator('Nom'),
                     ),
                   ),
 
-                  SizedBox(height: 10,),
+                  SizedBox(height: 38,),
                   const Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Text('Age',
@@ -164,15 +153,11 @@ class _UpdateUserState extends ConsumerState
                       {
                         //age  = val;
                       },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                      decoration: Widgets.formFieldDecorator('Age'),
                     ),
                   ),
 
-                  SizedBox(height: 10,),
+                  SizedBox(height: 47,),
 //button de validation et de saving
                   Padding(
                       padding: EdgeInsets.only(left: 20, right: 20.0),
@@ -190,10 +175,13 @@ class _UpdateUserState extends ConsumerState
                              //print('fname: $fn');
                               //
                               int id = await  DatabaseManager.getUserId(data!);
+                             Object idAPI = await ServiceMethodes.getId(data['firstName']);
                              UsersModel model = UsersModel(id: id, firstName: fname, lastName: lname, age: int.parse(age)) ;
-                             Notifications notif = Notifications(minute: '${DateTime.now().minute.toString()}' , hour: '${DateTime.now().hour.toString()}', name: model.lastName, mode: 'updated');
+                             UsersModel model2 = UsersModel(id: idAPI, firstName: fname, lastName: lname, age: int.parse(age)) ;
+                             Notifications notif = Notifications(idNotif:null, minute: '${DateTime.now().minute.toString()}' , hour: '${DateTime.now().hour.toString()}',   message: '${data?['lastName']} updated');
                              //DatabaseManager.updateDB(model);
-                             EditUserViewModel.actionButtonSaveChanges(context, model, notif);
+
+                             EditUserViewModel.actionButtonSaveChanges(context, model, notif, id, int.parse(idAPI.toString()), model2);
                              //context.read(Providers.isVisibleProvider).state = true;
                             Widgets.isVisible = true;
 //add notification
@@ -211,6 +199,7 @@ class _UpdateUserState extends ConsumerState
                         ),
                       )
                   ),
+                  SizedBox(height: 186,),
                   //Widgets.button(context, "SAVE", Widgets.Dialog(context, "Save changes ?", "the modificatons you made will  update the data", "Cancel", "Save"), 330.0, 50.0),
                 ],
               )

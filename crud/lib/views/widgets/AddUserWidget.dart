@@ -1,9 +1,11 @@
 import 'package:crud/models/Users.dart';
 import 'package:crud/viewModels/AddUserViewModel.dart';
+import 'package:crud/views/pages/Page.dart';
 import 'package:crud/views/widgets/Widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../models/notification.dart';
 import '../../viewModels/databaseManager/databaseManager.dart';
 
 class AddUserWidget extends ConsumerStatefulWidget
@@ -29,76 +31,87 @@ class _AddUserState extends ConsumerState<AddUserWidget>
         children: [
           SizedBox(height: 20.0,),
           //container of use profile
-          Container(
-            height: 150.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color.fromARGB(200, 200, 200, 200),
-            ),
-          ),
+          Widgets.circleProfil(),
 
-          SizedBox(height: 10,),
+          SizedBox(height: 73,),
           //formulaire d' ajout
           Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Text('First name',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
-                      ),),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      children: [
+                        Text('First name',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 15,),
+                        Icon(Icons.circle_rounded, color: Colors.red, size: 5,)
+                      ],
+                    )
                   ),
                   //formField( 'Prénom', fname),
-                  Padding(
+                  //Widgets.formField('Prénom', fname, AddUserViewModel.validetor(fname)),
+                  Container(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: TextFormField(
+                      validator: (val) {
+                        if(val!.isEmpty)
+                        {
+                          return'first name required';
+                        }
+                        else
+                          return null;
+                      },
 
-                      validator: (val) => val!.isEmpty ? "first name required": null,
                       onChanged: (val)
                       {
                         fname  = val;
                       },
-
-                      decoration: InputDecoration(
-                          hintText: 'Prenom',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
-                    ),
+                      decoration:  Widgets.formFieldDecorator('Prénom')
+                  ),
                   ),
 
-                  SizedBox(height: 10,),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Text('Last name',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
-                      ),),
+                   SizedBox(height: 38,),
+
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      children: [
+                        Text('Last name',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 15,),
+                        Icon(Icons.circle_rounded, color: Colors.red, size: 5,)
+                      ],
+                    )
                   ),
                   //formField( 'Nom', lname),
-                  Padding(
+                 // Widgets.formField('Nom', lname, AddUserViewModel.validetor( lname)),
+                  Container(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: TextFormField(
+                        validator: (val) {
+                          if(val!.isEmpty)
+                          {
+                            return'last name required';
+                          }
+                          else
+                            return null;
+                        },
 
-                      validator: (val) => val!.isEmpty ? "last name required": null,
-                      onChanged: (val)
-                      {
-                        lname  = val;
-                      },
-                      decoration: InputDecoration(
-                          hintText: 'Nom',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                        onChanged: (val)
+                        {
+                          lname  = val;
+                        },
+                        decoration:  Widgets.formFieldDecorator('Nom')
                     ),
                   ),
 
-                  SizedBox(height: 10,),
+
+                  SizedBox(height: 38,),
                   const Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Text('Age',
@@ -106,56 +119,55 @@ class _AddUserState extends ConsumerState<AddUserWidget>
                           fontWeight: FontWeight.bold
                       ),),
                   ),
-                  //formField('Age', age),
-                  Padding(
+                  Container(
                     padding: EdgeInsets.only(left: 20, right: 20),
+
                     child: TextFormField(
-                      validator: (val) {
-                        if(val!.isNotEmpty)
-                          {
-                            if(regex.hasMatch(val))
-                              {
-                                return null;
-                              }
-                            else
-                              {
-                                return "The age must be a number";
-                              }
+                        validator: (val) {
+                          if (val!.isNotEmpty) {
+                            if (RegExp(r'^[0-9]+$').hasMatch(val)) {
+                              return null;
+                            }
+                            else {
+                              return "The age must be a number";
+                            }
                           }
-                        else
-                          {
+                          else {
                             return "age required";
                           }
-                      },
-                      onChanged: (val)
-                      {
-                        age  = val;
-                      },
+                        },
 
-                      decoration: const InputDecoration(
-                          hintText: 'age',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                        onChanged: (val)
+                        {
+                          age  = val;
+                        },
+                        decoration:  Widgets.formFieldDecorator('Age')
                     ),
                   ),
 
-                  SizedBox(height: 10,),
+                  SizedBox(height: 47,),
 //buton to save
-                  Padding(
+                  Container(
                       padding: EdgeInsets.only(left: 20, right: 20.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       child: SizedBox(
                         width: Widgets.width(context),
-                        height: 50,
+                        height: 46,
                         child: ElevatedButton(
                           onPressed: () {
                             //action de validation
                             if(_formKey.currentState!.validate())
                             {
                               print('fname: $fname, lname: $lname');
+                              Notifications notif = Notifications(idNotif:null, minute: '${DateTime.now().minute.toString()}' , hour: '${DateTime.now().hour.toString()}',   message: '$fname created');
                               UsersModel model = UsersModel(id: null ,firstName: fname, lastName: lname, age: int.parse(age)) ;
-                             AddUserViewModel.actionSave(context, model);
+                              AddUserViewModel.actionSave(context, model, notif);
+
+                              Widgets.isVisible = true;
+
+
                             }
                             else
                             {
@@ -164,12 +176,15 @@ class _AddUserState extends ConsumerState<AddUserWidget>
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(Colors.black),
+                            side: MaterialStateProperty.all(BorderSide())
                           ),
-                          child: Text('SAVE'),
+                          child: Widgets.textButton('Save'),
 
                         ),
                       )
                   ),
+
+                  SizedBox(height: 186,),
 
                 ],
               )

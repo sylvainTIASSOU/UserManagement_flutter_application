@@ -4,21 +4,24 @@ import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
 part 'services.g.dart';
-@RestApi(baseUrl: 'http://127.0.0.1/')
+@RestApi(baseUrl: 'http://192.168.43.173:3000/')
 abstract class ApiService
 {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
-  @POST("path")
+  @POST("/user")
   Future<UsersModel> create(@Body() UsersModel users);
 
-  @GET('users') //path a changer
+  @GET('/user') //path a changer
   Future<List<UsersModel>> getAll(); //getPost a remplacr par la fonction qui corespond
 
+  @GET('/user/{firstName}') //path a changer
+  Future<String> getId(@Path("firstName") String firstName); //getPost a remplacr par la fonction qui corespond
+
   //api delete
-  @DELETE("path/{id}")
+  @DELETE("/user/{id}")
   Future<UsersModel> delete(@Path("id") String id);
 
   //api to update
-  @PUT("path/{id}")
-  Future<UsersModel> update(@Path('id') String id, UsersModel users);
+  @PUT("/user/{id}")
+  Future<UsersModel> update(@Path('id') int id, @Body() UsersModel users);
 }

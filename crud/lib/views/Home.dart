@@ -15,6 +15,7 @@ class Home extends StatelessWidget
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        fontFamily: 'JetBrainsMono',
       ),
       title: 'home page',
     //  home: UserList(),

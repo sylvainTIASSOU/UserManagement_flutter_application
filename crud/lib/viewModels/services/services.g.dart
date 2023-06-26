@@ -13,7 +13,7 @@ class _ApiService implements ApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://127.0.0.1/';
+    baseUrl ??= 'http://192.168.43.173:3000/';
   }
 
   final Dio _dio;
@@ -35,7 +35,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'path',
+              '/user',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -58,7 +58,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'users',
+              '/user',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -66,6 +66,28 @@ class _ApiService implements ApiService {
     var value = _result.data!
         .map((dynamic i) => UsersModel.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<String> getId(firstName) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/${firstName}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
     return value;
   }
 
@@ -83,7 +105,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'path/${id}',
+              '/user/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -100,7 +122,8 @@ class _ApiService implements ApiService {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(users.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<UsersModel>(Options(
       method: 'PUT',
@@ -109,7 +132,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'path/${id}',
+              '/user/${id}',
               queryParameters: queryParameters,
               data: _data,
             )

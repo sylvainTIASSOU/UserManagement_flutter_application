@@ -18,8 +18,6 @@ static void moveToUserProfil(BuildContext context, List<UsersModel> user, index)
   //create button
   static void moveToCreatePage(BuildContext context)
   {
-    //Navigator.pushReplacementNamed(context, '/addUser');
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => AddUser()));
     Navigator.pushNamed(context, '/addUser');
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-
 class DatabaseManager
 {
   DatabaseManager._();
@@ -26,7 +25,7 @@ class DatabaseManager
 
  static initDB() async
   {
-    final path = join(await getDatabasesPath(), 'Userdatabase.db');
+    final path = join(await getDatabasesPath(), 'Usermanagerdb.db');
     WidgetsFlutterBinding.ensureInitialized();
     return await openDatabase(
         path,
@@ -34,7 +33,8 @@ class DatabaseManager
         //cree les tables
         onCreate: (db, version)
         {
-           return db.execute('CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT,firstName TEXT, lastName TEXT, age INTEGER)');
+           db.execute('CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT,firstName TEXT, lastName TEXT, age INTEGER)');
+           db.execute('CREATE TABLE notification(idNotif INTEGER PRIMARY KEY AUTOINCREMENT, minute TEXT, hour TEXT,message TEXT)');
            //db.execute('CREATE TABLE notification(id INTEGER PRIMARY KEY AUTOINCREMENT, minute TEXT, hour TEXT, name TEXT, mode TEXT)');
         },
 
@@ -59,7 +59,9 @@ static Future<List<UsersModel>> getAllUser() async
 {
   final Database db  = await databases;
   //requete de selection
-  final List<Map<String, dynamic>> maps = await db.query("users");
+  final List<Map<String, dynamic>> maps = await db.query("users"
+      ,
+      orderBy: "id DESC");
   return List.generate(maps.length, (i) {
     return UsersModel(
         id: maps[i]['id'],
@@ -71,13 +73,13 @@ static Future<List<UsersModel>> getAllUser() async
 }
 
 //function of update
-  static Future<void> updateDB(UsersModel user) async
+  static Future<void> updateDB(id, UsersModel user) async
 {
   final Database db  = await databases;
   await db.update("users",
       user.toMap(),
   where: 'id = ?',
-    whereArgs: [user.id]
+    whereArgs: [id]
   );
 }
 

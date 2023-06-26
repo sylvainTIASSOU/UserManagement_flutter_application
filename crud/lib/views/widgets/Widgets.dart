@@ -2,8 +2,94 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../my_flutter_app_icons.dart';
+
 class Widgets
 {
+
+  //profill of
+
+  //back button on AppBar
+  static Widget backButton(BuildContext context)
+  {
+    return Container(
+      // height: 20,
+      // width: 20,
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 255, 255, 255),
+        shape: BoxShape.circle,
+        border: Border.all(
+            color: Color.fromARGB(255, 217, 217, 217),
+            width: 2.0
+        ),
+      ),
+      child: IconButton(
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
+        icon: Center(child: Icon(Icons.west_outlined, color: Colors.black,size: 18,),),
+      ),
+    );
+  }
+  
+  
+  //text of button
+  static Widget textButton(String name)
+  {
+    return Text(name,
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+
+      ),);
+  }
+
+  //profil circle of addUser and editUser
+  static Widget circleProfil()
+  {
+    return Container(
+      height: 128.0,
+      width: 128.0,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color.fromARGB(255, 218, 220, 224),
+      ),
+      child: Image.asset('assets/profil.png', scale: 0.3,)
+    );
+  }
+
+  //PROFIL circcle
+  static Widget circle(Widget widget)
+  {
+    return Container(
+        height: 40,
+        width: 40,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Color.fromARGB(217, 217, 228, 236),
+        ),
+        child: widget
+      //Icon(Icons.perm_identity, size: 25.0,),
+    );
+  }
+
+  //app bar style
+  static Widget appBarTitle(String title)
+  {
+    return Text(title,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w800,
+        //height: 26
+      ),);
+  }
+
+
+
   //varible pour afficher le point de notification
   static bool isVisible = false;
   //toast message
@@ -46,18 +132,46 @@ static void toastMsg(String msg)
   }
 
   //field methode
-  static Widget formField( String hint)
+ static formFieldDecorator(hint)
   {
-    return  Padding(
+    return InputDecoration(
+
+        hintText: hint,
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(250, 0, 0, 0),
+            width: 2.0,
+          ),
+        ),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0))
+        )
+    );
+  }
+  static Widget formField( String hint, String name, validator )
+  {
+    return  Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       child: TextFormField(
-        validator: (value){
-          //validate field
+        validator: (val) {
+         return validator;
         },
-        decoration: InputDecoration(
+
+        onChanged: (val)
+        {
+          name  = val;
+        },
+        decoration:  InputDecoration(
+
             hintText: hint,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color.fromARGB(250, 0, 0, 0),
+                width: 2.0,
+              ),
+            ),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))
+                borderRadius: BorderRadius.all(Radius.circular(8.0))
             )
         ),
       ),

@@ -1,9 +1,11 @@
+import 'package:crud/viewModels/services/serviceMethodes.dart';
 import 'package:crud/views/pages/Notification.dart';
 import 'package:crud/views/pages/UserList.dart';
 import 'package:crud/views/widgets/Widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../my_flutter_app_icons.dart';
 import '../../viewModels/providers/providers.dart';
 
 class PageHome extends ConsumerStatefulWidget {
@@ -22,7 +24,6 @@ class _PageState extends ConsumerState<PageHome> {
   @override
   void initState() {
     super.initState();
-
     _pageController = PageController();
     ref.read(Providers.isVisibleProvider);
   }
@@ -119,6 +120,7 @@ class _PageState extends ConsumerState<PageHome> {
               BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,
+                    size: 30,
                   ),
                   label: 'home'),
               BottomNavigationBarItem(
@@ -126,7 +128,8 @@ class _PageState extends ConsumerState<PageHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.notifications,
+                        MyFlutterApp.notif,
+                        size: 30,
                       ),
                       //showicon(isVisited)
                       Visibility(
@@ -135,8 +138,8 @@ class _PageState extends ConsumerState<PageHome> {
                             padding: EdgeInsets.only(bottom: 20),
                             child: Icon(
                               Icons.circle,
-                              size: 10,
-                              color: Colors.red,
+                              size: 8,
+                              color: Color.fromARGB(255, 195, 6, 38),
                             ),
                           ))
                     ],
@@ -180,7 +183,8 @@ class _PageState extends ConsumerState<PageHome> {
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.home,
+                    MyFlutterApp.solid__1_,
+                    size: 30,
                   ),
                   label: 'home'),
               BottomNavigationBarItem(
@@ -188,7 +192,9 @@ class _PageState extends ConsumerState<PageHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.notifications,
+                        MyFlutterApp.notif,
+                       size: 30,
+
                       ),
                       //showicon(isVisited)
                       Visibility(
@@ -197,8 +203,8 @@ class _PageState extends ConsumerState<PageHome> {
                             padding: EdgeInsets.only(bottom: 20),
                             child: Icon(
                               Icons.circle,
-                              size: 10,
-                              color: Colors.red,
+                              size: 8,
+                              color: Color.fromARGB(255, 195, 6, 38),
                             ),
                           ))
                     ],

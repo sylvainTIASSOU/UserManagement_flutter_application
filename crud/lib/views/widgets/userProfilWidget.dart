@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/notification.dart';
+import '../../viewModels/databaseManager/databaseManager.dart';
+import '../../viewModels/services/serviceMethodes.dart';
 
 class UserProfilWidget extends ConsumerWidget
 {
@@ -17,23 +19,29 @@ class UserProfilWidget extends ConsumerWidget
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 30.0,),
+          SizedBox(height: 115.0,),
 
           Container(
             padding: EdgeInsets.all(20),
-              margin: EdgeInsets.only(left: 20, right: 20),
-            height: 250,
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(200, 236, 236, 239),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+            margin: EdgeInsets.only(left: 20, right: 20),
+            height: 304,
+            width: Widgets.width(context),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color.fromARGB(27, 19, 19, 19),
+                width: 2
+              ),
+              //color: Color.fromARGB(255, 243, 245, 248),
+              borderRadius: BorderRadius.all(Radius.circular(24)),
             ),
             child: Column(
               children: [
                 Container(
-                  height: 150.0,
+                  height: 180,
+                  width: 180,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color.fromARGB(200, 200, 200, 200),
+                    color: Color.fromARGB(236, 226, 233, 239),
                   ),
                 ),
 
@@ -41,65 +49,82 @@ class UserProfilWidget extends ConsumerWidget
                 Text('${data?['firstName']} ${data?['lastName']}',
                     style: const TextStyle(
                         color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20
                     )
                 ),
-                Text('${data?['age']} y/o'),
-
-
+                Text('${data?['age']} y/o',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400
+                ),),
               ],
             ),
           ),
 
-          const SizedBox(height: 100,),
+          const SizedBox(height: 196,),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: SizedBox(
-              width: Widgets.width(context),
-              height: 50,
-              child: ElevatedButton(
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.black,
+
+            ),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            width: Widgets.width(context),
+            height: 48,
+            child: ElevatedButton(
                 onPressed: (){
                   UserProfilViewModel.actionButtonEdit(context, data!);
                 },
-                child:Text('Edit profil'),
+                child:Widgets.textButton('Edit profil'),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black),
                 ),
 
               ),
             ),
-          ),
 
-          SizedBox(height: 20,),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: SizedBox(
-              width: Widgets.width(context),
-              height: 50,
-              child: ElevatedButton(
-                onPressed: ()  {
-                  Notifications notif = Notifications(minute: '${DateTime.now().minute.toString()}' , hour: '${DateTime.now().hour.toString()}', name: model.lastName, mode: 'deleted');
-                  UserProfilViewModel.actionButtonDelete(context, model, notif);
+          SizedBox(height: 10,),
+
+          Container(
+            decoration: BoxDecoration(
+              color: Color.fromARGB(236, 226, 233, 239),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: Color.fromARGB(236, 226, 233, 239),
+                width: 2
+              )
+            ),
+            width: Widgets.width(context),
+            height: 50,
+            margin: EdgeInsets.only(left: 20.0, right: 20.0),
+            child:  TextButton(
+                onPressed: ()  async {
+                  //UserProfilViewModel.alertDialog(context);
+                  int id = await  DatabaseManager.getUserId(data!);
+                  Notifications notif = Notifications(idNotif: null, minute: '${DateTime.now().minute.toString()}' , hour: '${DateTime.now().hour.toString()}', message: '${data['lastName']}  deleted');
+                  var idAPI = await ServiceMethodes.getId(data['firstName']);
+                  UserProfilViewModel.actionButtonDelete(context, model, notif, id, idAPI);
                   Widgets.isVisible = true;
                   //Widgets.Dialog(context, 'Delete user?', 'The user and their data will be deleted? Do you want to proceed', 'No', 'Yes');
                 },
-                child:Text(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(
+                      236, 226, 233, 239)),
+                ),
+                child:const Text(
                     'Delete profil',
                 style: TextStyle(
                   color: Colors.black
                 )
                 ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-
-                ),
 
               ),
             ),
-          ),
+
+          SizedBox(height: 20,),
         ],
       ),
     );
